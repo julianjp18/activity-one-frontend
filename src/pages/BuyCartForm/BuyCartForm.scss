@@ -1,0 +1,42 @@
+
+.buy-cart-main {
+    h1 {
+        text-align: center;
+    }
+}
+
+.show-product-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+.show-product-image-container {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+    img {
+        width: 100%;
+        max-height: 160px;
+    }
+}
+
+.show-product-description-container {
+    width: auto;
+    padding-top: 50px;
+
+    .main-title {
+        font-size: 24px;
+        line-height: 28px;
+        font-weight: 600;
+        margin: 0 0 10px 0;
+    }
+    
+    .main-price {
+        font-size: 44px;
+        line-height: 48px;
+    }
+}
+

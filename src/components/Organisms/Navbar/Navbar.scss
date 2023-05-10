@@ -1,0 +1,32 @@
+@import "../../../assets/styles/variables";
+
+.navbar-header {
+    background-color: $primary-bg-color;
+    display: block;
+    height: 60px;
+}
+
+.navbar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    max-width: 1200px;
+    gap: 30px;
+    margin: auto;
+    height: 100%;
+
+    @media (max-width: $bp-md) {
+        padding: 0 10px;
+    }
+}
+
+.navbar-logo {
+    height: 34px;
+    width: 134px;
+}
+
+.navbar-search-bar {
+    width: 100%;
+}

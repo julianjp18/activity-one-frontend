@@ -1,0 +1,10 @@
+@import "../../../assets/styles/variables";
+
+.autocomplete {
+    width: 100%;
+
+    button {
+        background-color: $secondary-bg-color;
+        box-shadow: none;
+    }
+}

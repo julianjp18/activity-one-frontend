@@ -1,0 +1,15 @@
+@import "assets/styles/variables";
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $secondary-bg-color;
+}
+main {
+  max-width: $bp-xl;
+  margin: 10px auto;
+
+  @media (max-width: $bp-md) {
+    padding: 0 10px;
+  }
+}

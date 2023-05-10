@@ -1,0 +1,10 @@
+@import "../../../assets/styles/variables";
+
+.product-list-container {
+    background-color: $third-bg-color;
+    border-radius: 10px;
+    margin: 10px auto;
+    max-width: 1200px;
+    min-height: 100vh;
+    padding: 16px;
+}
