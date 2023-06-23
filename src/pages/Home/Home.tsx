@@ -24,6 +24,7 @@ const Home = () => {
     
     const getProductsList = async () => {
         const response = await FakeStoreService.getProducts();
+        console.log('response', response);
         if (response.statusCode === 200 && response.data) {
             setProductsList(response.data);
         }

@@ -1,39 +1,31 @@
-import { get } from "../../api/fetch";
+import { get, post } from "../../api/fetch";
 import { ProductI, ServiceI } from "./FakeStoreService.utils";
 
 //const MAIN_URL = import.meta.env.VITE_BACKEND_URL;
-const MAIN_URL = 'https://api.mercadolibre.com/';
+const MAIN_URL = 'http://localhost:8762/ms-search/';
 
 const FakeStoreService = {
-    getProducts: async (queryParam = ':query'): Promise<ServiceI> => {
+    getProducts: async (queryParam = ''): Promise<ServiceI> => {
       try {
-        const params = new URLSearchParams({ q: queryParam });
-        const { results } = await get(`${MAIN_URL}sites/MLA/search?${params}`);
+        const params = new URLSearchParams({ description: queryParam, title: queryParam });
+        const results = await get(`${MAIN_URL}products${queryParam ? `?${params}` : ''}`);
         if (results.length > 0) {
           let categories: any = [];
           const itemsList: ProductI[] = [];
             results.forEach(({
-                category_id,
-                condition,
+              categoryId,
                 id,
-                installments: { currency_id, amount, rate },
-                shipping: { free_shipping },
                 thumbnail,
                 title,
+                price,
             }: any) => {
-                categories.push(category_id);
+                categories.push(categoryId);
                 itemsList.push({
                     id,
-                    condition,
                     title,
-                    category_id,
+                    category_id: categoryId,
                     picture: thumbnail,
-                    price: {
-                        currency: currency_id || 0,
-                        amount,
-                        decimals: rate,
-                    },
-                    free_shipping,
+                    price,
                 })
             });
             if (categories.length > 0) categories = [...new Set(categories)];
@@ -56,41 +48,31 @@ const FakeStoreService = {
         };
       }
     },
-    getProductById: async (productId: string): Promise<ServiceI> => {
+    getProductById: async (productId: string): Promise<any> => {
         try {
-          const generalData = await get(`${MAIN_URL}items/${productId}`);
-          const description = await get(`${MAIN_URL}items/${productId}/description`);
+          const generalData = await get(`${MAIN_URL}products?id=${productId}`);
+          // const description = await get(`${MAIN_URL}products/${productId}/description`);
           const {
             category_id,
-            condition,
-            currency_id,
             id,
-            pictures,
             price,
-            shipping: { free_shipping },
-            sold_quantity,
             title,
             thumbnail,
-          } = generalData;
-          const { plain_text } = description;
+            description,
+          } = generalData[0];
+
           if (generalData || description) {
             const itemFounded = {
               id,
-              condition,
-              free_shipping,
               category_id,
-              picture: pictures[0].url ?? thumbnail,
-              price: {
-                  currency: currency_id,
-                  amount: price,
-              },
+              picture: thumbnail,
+              price: price,
               title,
-              sold_quantity,
             };
             return {
                 data: new Array({
                   ...itemFounded,
-                  description: plain_text,
+                  description,
               }),
                 statusCode: 200,
             };
@@ -106,7 +88,43 @@ const FakeStoreService = {
               error: err,
           };
         }
-      },
+    },
+    buyProductById: async (id: string, payload: any): Promise<any> => {
+      try {
+        const {
+          firstName,
+          lastName,
+          email,
+          phone,
+          address,
+          city,
+          price,
+          comments,
+        } = payload;
+        const data = await post(`http://localhost:8762/ms-actions/purchases`, {
+          productId: id,
+          quantity: 1,
+          totalAmount: price,
+          customerName: firstName,
+          customerLastName: lastName,
+          customerEmail: email,
+          customerPhone: phone,
+          customerAddress: address,
+          customerCity: city,
+          comments,
+        });
+        return {
+          data,
+          statusCode: 200,
+        };
+      } catch (err: any) {
+        return {
+            data: null,
+            statusCode: 500,
+            error: err,
+        };
+      }
+    },
 };
 
 export default FakeStoreService;

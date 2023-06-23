@@ -30,10 +30,10 @@ const BuyCartForm = () => {
   );
   const [api, contextHolder] = notification.useNotification();
 
-    const navigate = useNavigate();
-    useEffect(() => {
-        getProductById();
-    }, []);
+  const navigate = useNavigate();
+  useEffect(() => {
+      getProductById();
+  }, []);
 
     const getProductById = async () => {
       if (id) {
@@ -56,9 +56,18 @@ const BuyCartForm = () => {
   };
 
 
-  const buyProductOnClick = (values: any) => {
+  const buyProductOnClick = async (values: any) => {
     if (values) {
-      openNotificationWithIcon('success');
+      const response = await FakeStoreService.buyProductById(`${id}`, {
+        ...values,
+        price: productToShow?.price ?? 0,
+      });
+      if (response?.statusCode === 200 && response.data) {
+        openNotificationWithIcon('success');
+        setTimeout(() => {
+          navigate('/');
+        }, 3000);
+      }
     }
   };
 
@@ -79,7 +88,7 @@ const BuyCartForm = () => {
             <div className="show-product-description-container">
                 <span className="main-category">{productToShow.category_id}</span>
                 <h1 className="main-title">{productToShow.title}</h1>
-                <h2 className="main-price">$ {productToShow.price.amount} {productToShow.price.currency}</h2>
+                <h2 className="main-price">$ {productToShow.price} USD</h2>
             </div>
           </div>
         )}

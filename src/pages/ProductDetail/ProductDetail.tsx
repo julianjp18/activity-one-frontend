@@ -27,12 +27,16 @@ const ProductDetail = () => {
         if (id) {
             const response = await FakeStoreService.getProductById(id);
             if (response?.statusCode === 200 && response.data) {
-                setProductToShow(response.data[0]);
-                setBreadcrumb([
-                    ...INIT_BREADCRUMB,
-                    { text: `${response.data[0].category_id}`},
-                    { text: response.data[0].title},
-                ])
+                const isEmpty = Object.values(response.data[0]).find((value: any) => value !== undefined);
+
+                if (isEmpty) {
+                    setProductToShow(response.data[0]);
+                    setBreadcrumb([
+                        ...INIT_BREADCRUMB,
+                        { text: `${response.data[0].category_id}`},
+                        { text: response.data[0].title},
+                    ]);
+                }
             } else {
                 navigate('/');
             }
@@ -58,7 +62,7 @@ const ProductDetail = () => {
                         <div className="main-description-container">
                             <span className="main-category">{productToShow.category_id}</span>
                             <h1 className="main-title">{productToShow.title}</h1>
-                            <h2 className="main-price">$ {productToShow.price.amount} {productToShow.price.currency}</h2>
+                            <h2 className="main-price">$ {productToShow.price} USD</h2>
                             <div className="buy-button-container">
                                 <Button text="Comprar" onClick={buyProductOnClick} block />
                             </div>

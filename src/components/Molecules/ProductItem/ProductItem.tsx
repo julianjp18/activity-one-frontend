@@ -15,13 +15,11 @@ const ProductItem = ({ product }: ProductItemI) => {
         id,
         title,
         picture,
-        price: {
-            amount,
-            currency,
-            decimals,
-        },
+        price,
         category_id,
     } = product;
+
+    const decimals = 5;
 
     return (
         <React.Fragment>  
@@ -29,7 +27,7 @@ const ProductItem = ({ product }: ProductItemI) => {
                             <img className="product-item-img" src={picture} alt={title} />
                             <div className="product-item-description">
                                 <Link to={`/items/${id}`}>
-                                    <h2 className="price-text">$ {amount} {currency}</h2>
+                                    <h2 className="price-text">${price} USD</h2>
                                 </Link>
                                 <Link to={`/items/${id}`}>
                                     <h3 className="title-text">{title}</h3>
