@@ -49,7 +49,7 @@ const FakeStoreService = {
     },
     getProductById: async (productId: string): Promise<any> => {
         try {
-          const generalData = await get(`${MAIN_URL}ms-search/products?id=${productId}`);
+          const generalData = await get(`${MAIN_URL}products/${productId}`);
           // const description = await get(`${MAIN_URL}products/${productId}/description`);
           const {
             category_id,
@@ -58,7 +58,7 @@ const FakeStoreService = {
             title,
             thumbnail,
             description,
-          } = generalData[0];
+          } = generalData;
 
           if (generalData || description) {
             const itemFounded = {

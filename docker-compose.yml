@@ -2,11 +2,11 @@ version: '3.5'
 services:
   app:
     build: .
-    container_name: vite-react-express
+    container_name: activity
     command: npm run dev
-    image: vite-react-express:latest
+    image: activity:latest
     ports:
       - '3000:3000'
-      - '3001:3001'
+      - '5173:5173'
     volumes:
       - .:/app
