@@ -2,7 +2,6 @@ FROM node:14-slim
 
 WORKDIR /app
 
-# Setup a path for using local npm packages
 RUN mkdir -p /opt/node_modules
 
 COPY ./package.json /app
