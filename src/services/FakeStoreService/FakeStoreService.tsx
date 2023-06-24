@@ -1,39 +1,38 @@
 import { get, post } from "../../api/fetch";
 import { ProductI, ServiceI } from "./FakeStoreService.utils";
 
-//const MAIN_URL = import.meta.env.VITE_BACKEND_URL;
-const MAIN_URL = 'http://localhost:8762/ms-search/';
+const MAIN_URL = 'http://localhost:8762/';
 
 const FakeStoreService = {
     getProducts: async (queryParam = ''): Promise<ServiceI> => {
       try {
         const params = new URLSearchParams({ description: queryParam, title: queryParam });
-        const results = await get(`${MAIN_URL}products${queryParam ? `?${params}` : ''}`);
+        const results = await get(`${MAIN_URL}ms-search/products${queryParam ? `?${params}` : ''}`);
         if (results.length > 0) {
           let categories: any = [];
           const itemsList: ProductI[] = [];
-            results.forEach(({
-              categoryId,
+          results.forEach(({
+            categoryId,
+            id,
+            thumbnail,
+            title,
+            price,
+          }: any) => {
+              categories.push(categoryId);
+              itemsList.push({
                 id,
-                thumbnail,
                 title,
+                category_id: categoryId,
+                picture: thumbnail,
                 price,
-            }: any) => {
-                categories.push(categoryId);
-                itemsList.push({
-                    id,
-                    title,
-                    category_id: categoryId,
-                    picture: thumbnail,
-                    price,
-                })
-            });
-            if (categories.length > 0) categories = [...new Set(categories)];
-            return {
-              categories,
-              data: itemsList,
-              statusCode: 200,
-            };
+              })
+          });
+          if (categories.length > 0) categories = [...new Set(categories)];
+          return {
+            categories,
+            data: itemsList,
+            statusCode: 200,
+          };
         }
         
         return {
@@ -50,7 +49,7 @@ const FakeStoreService = {
     },
     getProductById: async (productId: string): Promise<any> => {
         try {
-          const generalData = await get(`${MAIN_URL}products?id=${productId}`);
+          const generalData = await get(`${MAIN_URL}ms-search/products?id=${productId}`);
           // const description = await get(`${MAIN_URL}products/${productId}/description`);
           const {
             category_id,
@@ -101,7 +100,7 @@ const FakeStoreService = {
           price,
           comments,
         } = payload;
-        const data = await post(`http://localhost:8762/ms-actions/purchases`, {
+        const data = await post(`${MAIN_URL}ms-actions/purchases`, {
           productId: id,
           quantity: 1,
           totalAmount: price,
